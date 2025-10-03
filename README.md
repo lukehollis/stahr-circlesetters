@@ -1,3 +1,6 @@
+![michael_telescope_stahr](https://github.com/user-attachments/assets/69e526a2-c9bf-4d77-9289-70886cce3f82)
+
+
 # STAHR Setting Circles Helper
 
 [![Python](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/)

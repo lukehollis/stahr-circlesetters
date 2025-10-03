@@ -3,7 +3,7 @@
 [![Python](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/)
 [![Jupyter](https://img.shields.io/badge/jupyter-notebook-orange)](https://jupyter.org/)
 [![License](https://img.shields.io/badge/license-CC%20BY--SA%204.0-green)](https://creativecommons.org/licenses/by-sa/4.0/)
-[![GitHub issues](https://img.shields.io/github/issues/username/repo)](https://github.com/lukehollis/stahr-circlesetters/issues) <!-- Replace with actual repo details if known -->
+[![GitHub issues](https://img.shields.io/github/issues/lukehollis/stahr-circlesetters)](https://github.com/lukehollis/stahr-circlesetters/issues) 
 
 Helper script for setting circles on the Michael Telescope, based on circlesetter.py by Casey Murray '25. Contact stahrgazers@gmail.com for questions.
 

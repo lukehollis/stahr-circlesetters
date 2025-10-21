@@ -186,3 +186,14 @@ app/static
 media
 media/tensorboard
 verification_images
+
+### Vite Client (client/) ###
+client/dist
+client/.vite
+client/coverage
+client/.vitest-pool
+client/.env.local
+client/.env.*.local
+client/npm-debug.log*
+client/yarn-debug.log*
+client/pnpm-debug.log*

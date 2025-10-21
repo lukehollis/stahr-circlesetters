@@ -1,0 +1,48 @@
+.App {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  overflow: hidden;
+}
+
+.scene-container {
+  flex-grow: 1;
+  height: 100%;
+}
+
+.controls {
+  width: 350px;
+  padding: 2rem;
+  background-color: rgba(0, 0, 32, 0.8);
+  border-left: 1px solid white;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.input-group label {
+  font-size: 1.1em;
+}
+
+.input-group input {
+  background-color: transparent;
+  border: 1px solid white;
+  color: white;
+  padding: 0.5em;
+  font-family: inherit;
+  font-size: 1em;
+}
+
+.results {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px dashed white;
+  min-height: 50px;
+  text-align: center;
+}

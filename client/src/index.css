@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&display=swap');
+
+:root {
+  font-family: 'EB Garamond', serif;
+  color: white;
+  background-color: #000020; /* Dark Navy Blue */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden; /* Prevent scrollbars */
+}
+
+h1 {
+  font-size: 2.5em;
+  font-weight: 700;
+  text-align: center;
+}
+
+button {
+  border-radius: 0;
+  border: 1px solid white;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 400;
+  font-family: inherit;
+  background-color: transparent;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.25s, color 0.25s;
+}
+
+button:hover {
+  background-color: white;
+  color: #000020;
+}

@@ -11,6 +11,8 @@
 
 Helper script and animated version for setting circles on the Michael Telescope, based on circlesetter.py by Casey Murray '25. Contact stahrgazers@gmail.com for questions. Any errors in this version are mine. 
 
+[Live Demo](https://lukehollis.github.io/stahr-circlesetters/)
+
 
 ## Features
 - Resolves astronomical objects using SIMBAD and JPL Horizons.

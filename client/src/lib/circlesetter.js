@@ -9,7 +9,7 @@ const getCurrentUTCTime = () => {
 
 // Checks that a time is validly formatted by querying JPL Horizons.
 export const timecheck = async (testTime) => {
-    const horizons_url = `https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND='301'&MAKE_EPHEM='YES'&EPHEM_TYPE='OBSERVER'&CENTER='500@399'&TLIST='${testTime}'&QUANTITIES='1'&REF_SYSTEM='B1950'`;
+    const horizons_url = `/api/horizons?format=text&COMMAND='301'&MAKE_EPHEM='YES'&EPHEM_TYPE='OBSERVER'&CENTER='500@399'&TLIST='${testTime}'&QUANTITIES='1'&REF_SYSTEM='B1950'`;
     try {
         const response = await fetch(horizons_url);
         const text = await response.text();
@@ -25,10 +25,12 @@ export const resolve = async (objectName, time = getCurrentUTCTime()) => {
     let ra, dec;
 
     // First attempt: HEASARC Coordinate Converter (SIMBAD)
-    const heasarc_url = `https://heasarc.gsfc.nasa.gov/cgi-bin/Tools/convcoord/convcoord.pl?CoordVal=${objectName}&CoordType=B1950&Resolver=GRB%2FSIMBAD%2BSesame%2FNED&NoCache=on&Epoch=`;
+    const heasarc_url = `/api/heasarc?CoordVal=${objectName}&CoordType=B1950&Resolver=GRB%2FSIMBAD%2BSesame%2FNED&NoCache=on&Epoch=`;
+    console.log("Requesting HEASARC URL:", heasarc_url);
     try {
         const response = await fetch(heasarc_url);
         const text = await response.text();
+        console.log("HEASARC Response:", text);
         if (!text.includes('Unable to resolve object/parse coordinates')) {
             const lines = text.split('\n');
             for (let i = 0; i < lines.length; i++) {
@@ -49,23 +51,70 @@ export const resolve = async (objectName, time = getCurrentUTCTime()) => {
     }
 
     // Second attempt: JPL Horizons for planets, asteroids, etc.
-    const horizons_url = `https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND='${encodeURIComponent(objectName)}'&MAKE_EPHEM='YES'&EPHEM_TYPE='OBSERVER'&CENTER='500@399'&TLIST='${time}'&QUANTITIES='1'&REF_SYSTEM='B1950'`;
+    let horizons_url = `/api/horizons?format=text&COMMAND=${encodeURIComponent(objectName)}&MAKE_EPHEM='YES'&EPHEM_TYPE='OBSERVER'&CENTER='500@399'&TLIST='${time}'&QUANTITIES='1'&REF_SYSTEM='B1950'`;
+    console.log("Requesting Horizons URL (initial):", horizons_url);
     try {
-        const response = await fetch(horizons_url);
-        const text = await response.text();
-        const lines = text.split('\n');
-        let ephemerisFound = false;
-        for (let i = 0; i < lines.length; i++) {
-            if (lines[i].includes('$$SOE')) {
-                const ephemeris = lines[i + 1].substring(30, 53).split(/\s+/);
-                ra = `${ephemeris[0]}:${ephemeris[1]}:${ephemeris[2]}`;
-                dec = `${ephemeris[3]}:${ephemeris[4]}:${ephemeris[5]}`;
-                ephemerisFound = true;
-                break;
+        let response = await fetch(horizons_url);
+        let text = await response.text();
+        console.log("Horizons Initial Response:", text);
+        let lines = text.split('\n');
+
+        // Handle multiple matches from Horizons, inspired by the original Python script
+        if (text.includes('Multiple major-bodies match string')) {
+            console.log("DEBUG: 'Multiple major-bodies match string' text found.");
+            let bestMatch = { id: null, name: 'a'.repeat(100) }; // A very long string
+            const lowerObjectName = objectName.toLowerCase();
+            console.log(`DEBUG: Searching for best match for "${lowerObjectName}"`);
+            console.log("DEBUG: Lines to search:", lines);
+
+            for (const line of lines) {
+                console.log(`DEBUG: Processing line: "${line}"`);
+                const isCandidate = line.trim().match(/^\d/);
+                console.log(`DEBUG: Is candidate? ${isCandidate ? 'Yes' : 'No'}`);
+
+                if (isCandidate) {
+                    const nameInLine = line.substring(11, 45).trim().toLowerCase();
+                    console.log(`DEBUG: Extracted name: "${nameInLine}"`);
+
+                    const includesName = nameInLine.includes(lowerObjectName);
+                    console.log(`DEBUG: Includes search term? ${includesName ? 'Yes' : 'No'}`);
+
+                    if (includesName) {
+                        const isShorter = nameInLine.length < bestMatch.name.length;
+                        console.log(`DEBUG: Is shorter than best match? ${isShorter ? 'Yes' : 'No'}`);
+                        if (isShorter) {
+                            bestMatch.id = line.substring(0, 10).trim();
+                            bestMatch.name = nameInLine;
+                            console.log(`DEBUG: New best match found: ID=${bestMatch.id}, Name=${bestMatch.name}`);
+                        }
+                    }
+                }
+            }
+
+            const objId = bestMatch.id;
+            console.log(`DEBUG: Final best match ID: ${objId}`);
+            if (objId) {
+                console.log(`Final selected ID: ${objId}`);
+                horizons_url = `/api/horizons?format=text&COMMAND=${objId}&MAKE_EPHEM='YES'&EPHEM_TYPE='OBSERVER'&CENTER='500@399'&TLIST='${time}'&QUANTITIES='1'&REF_SYSTEM='B1950'`;
+                console.log("Requesting Horizons URL (specific ID):", horizons_url);
+                response = await fetch(horizons_url);
+                text = await response.text();
+                console.log("Horizons Specific ID Response:", text);
+                lines = text.split('\n');
+            } else {
+                console.log("Could not find a suitable match.");
             }
         }
-        if (ephemerisFound) {
-            return { name: objectName, ra, dec };
+
+        for (let i = 0; i < lines.length; i++) {
+            if (lines[i].includes('$$SOE')) {
+                const ephemeris = lines[i + 1].substring(30, 53).split(/\s+/).filter(Boolean);
+                if (ephemeris.length >= 6) {
+                    ra = `${ephemeris[0]}:${ephemeris[1]}:${ephemeris[2]}`;
+                    dec = `${ephemeris[3]}:${ephemeris[4]}:${ephemeris[5]}`;
+                    return { name: objectName, ra, dec };
+                }
+            }
         }
     } catch (error) {
         console.error("Error resolving with Horizons:", error);

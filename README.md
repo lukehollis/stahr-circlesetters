@@ -1,4 +1,5 @@
 
+![loomis_telescope_setting_circles](https://github.com/user-attachments/assets/dae6dcde-2740-4d3c-ac5c-bfbbbf1d022c)
 
 # STAHR Setting Circles Helper
 
@@ -36,7 +37,12 @@ Example configuration:
 - Set `navobjs_input = ['Arcturus']`
 - Run cells to resolve and summarize.
 
-For command-line style, adapt as needed.
+For command-line style, use the original verison or adapt as needed.
+
+
+![setting_circles_moon](https://github.com/user-attachments/assets/5102e0f7-bb36-4a9b-8123-954ba1507571)
+
+
 
 ## Live Setting Circles Frontend
 
@@ -62,5 +68,7 @@ Feel free to modify and share, but credit STAHR (Student Astronomers at Harvard-
 ## Credits
 - Original: Casey Murray '25
 - STAHR: stahrgazers@gmail.com
+
+Ad astra.
 
 ![michael_telescope_stahr](https://github.com/user-attachments/assets/69e526a2-c9bf-4d77-9289-70886cce3f82)

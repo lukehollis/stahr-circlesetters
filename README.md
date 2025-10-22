@@ -1,4 +1,3 @@
-![michael_telescope_stahr](https://github.com/user-attachments/assets/69e526a2-c9bf-4d77-9289-70886cce3f82)
 
 
 # STAHR Setting Circles Helper
@@ -9,9 +8,8 @@
 [![GitHub issues](https://img.shields.io/github/issues/lukehollis/stahr-circlesetters)](https://github.com/lukehollis/stahr-circlesetters/issues) 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1F3SD-m1iwgjMsEwkkqAkOm-y-3jtsy-6)
 
-Helper script for setting circles on the Michael Telescope, based on circlesetter.py by Casey Murray '25. Contact stahrgazers@gmail.com for questions.
+Helper script and animated version for setting circles on the Michael Telescope, based on circlesetter.py by Casey Murray '25. Contact stahrgazers@gmail.com for questions. Any errors in this version are mine. 
 
-Version: 1.3 (Sep 8, 2024)
 
 ## Features
 - Resolves astronomical objects using SIMBAD and JPL Horizons.
@@ -22,9 +20,13 @@ Version: 1.3 (Sep 8, 2024)
 ## Installation
 Requires Python 3.8+. Uses uv for package management.
 
+First clone this repo, then run
+
 ```bash
 uv sync
 ```
+
+You will be able to use the environment to run the python notebook. 
 
 ## Usage
 Run the Jupyter notebook `circlesetter.ipynb`. Configure variables in the notebook (e.g., targets, navobjs, time).
@@ -36,9 +38,29 @@ Example configuration:
 
 For command-line style, adapt as needed.
 
+## Live Setting Circles Frontend
+
+The frontend provides a live, interactive 3D visualization of the Michael Loomis Telescope's setting circles. It's built with React and `three.js` (via `@react-three/fiber`).
+
+The visualization is designed to use while you're in the observatory if you don't want to use the python script or notebook. 
+
+You can also get up and running with the frontend by cd'ing to the client dir then running. 
+
+```bash
+pnpm i
+``` 
+
+and when the packages install, then
+
+```bash
+pnpm run dev
+```
+
 ## Contributing
-Feel free to modify and share, but credit STAHR (Student Astronomers at Harvard-Radcliffe).
+Feel free to modify and share, but credit STAHR (Student Astronomers at Harvard-Radcliffe). Again, any mistakes are mine. 
 
 ## Credits
 - Original: Casey Murray '25
 - STAHR: stahrgazers@gmail.com
+
+![michael_telescope_stahr](https://github.com/user-attachments/assets/69e526a2-c9bf-4d77-9289-70886cce3f82)

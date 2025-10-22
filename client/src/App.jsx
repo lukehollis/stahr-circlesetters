@@ -98,6 +98,7 @@ function App() {
                     <p>
                         <a href="https://sites.harvard.edu/stahr/" target="_blank" rel="noopener noreferrer" style={{ color: theme.text.secondary }}>[STAHR]</a>
                         <a href="https://sites.harvard.edu/stahr/resources/lmo-sop/" target="_blank" rel="noopener noreferrer" style={{ color: theme.text.secondary }}>[About]</a>
+                        <a href="https://github.com/lukehollis/stahr-circlesetters" target="_blank" rel="noopener noreferrer" style={{ color: theme.text.secondary }}>[Github]</a>
                     </p>
                 </div>
             </div>

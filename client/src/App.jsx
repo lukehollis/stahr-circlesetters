@@ -7,6 +7,7 @@ import './App.css';
 
 function App() {
     const { theme } = useContext(ThemeContext);
+    const [isMenuOpen, setMenuOpen] = useState(false);
     const [navObject, setNavObject] = useState('Arcturus');
     const [targetObject, setTargetObject] = useState('M51');
     const [coords, setCoords] = useState({ ra: 0, dec: 0, raStr: '', decStr: '' });
@@ -45,17 +46,20 @@ function App() {
 
     return (
         <div className="App" style={{ background: theme.background, color: theme.text.primary }}>
+            <button className="hamburger-menu" onClick={() => setMenuOpen(!isMenuOpen)}>
+                ☰
+            </button>
             <div className="scene-container">
-                <ThemeSwitcher />
                 <TelescopeScene ra={coords.ra} dec={coords.dec} raStr={coords.raStr} decStr={coords.decStr} />
                 <div className="presets">
-                    <button onClick={() => handlePresetClick('Jupiter')} style={{ backgroundColor: 'transparent', border: `1px solid ${theme.text.primary}`, color: theme.text.primary, padding: '0.5em', fontFamily: 'inherit', fontSize: '1em', cursor: 'pointer' }}>Jupiter</button>
-                    <button onClick={() => handlePresetClick('Saturn')} style={{ backgroundColor: 'transparent', border: `1px solid ${theme.text.primary}`, color: theme.text.primary, padding: '0.5em', fontFamily: 'inherit', fontSize: '1em', cursor: 'pointer' }}>Saturn</button>
-                    <button onClick={() => handlePresetClick('Moon')} style={{ backgroundColor: 'transparent', border: `1px solid ${theme.text.primary}`, color: theme.text.primary, padding: '0.5em', fontFamily: 'inherit', fontSize: '1em', cursor: 'pointer' }}>Moon</button>
-                    <button onClick={() => handlePresetClick('Mars')} style={{ backgroundColor: 'transparent', border: `1px solid ${theme.text.primary}`, color: theme.text.primary, padding: '0.5em', fontFamily: 'inherit', fontSize: '1em', cursor: 'pointer' }}>Mars</button>
+                    <button onClick={() => handlePresetClick('Jupiter')} style={{ backgroundColor: theme.display, border: `1px solid ${theme.text.primary}`, color: theme.text.primary, padding: '0.5em', fontFamily: 'inherit', fontSize: '1em', cursor: 'pointer' }}>Jupiter</button>
+                    <button onClick={() => handlePresetClick('Saturn')} style={{ backgroundColor: theme.display, border: `1px solid ${theme.text.primary}`, color: theme.text.primary, padding: '0.5em', fontFamily: 'inherit', fontSize: '1em', cursor: 'pointer' }}>Saturn</button>
+                    <button onClick={() => handlePresetClick('Moon')} style={{ backgroundColor: theme.display, border: `1px solid ${theme.text.primary}`, color: theme.text.primary, padding: '0.5em', fontFamily: 'inherit', fontSize: '1em', cursor: 'pointer' }}>Moon</button>
+                    <button onClick={() => handlePresetClick('Mars')} style={{ backgroundColor: theme.display, border: `1px solid ${theme.text.primary}`, color: theme.text.primary, padding: '0.5em', fontFamily: 'inherit', fontSize: '1em', cursor: 'pointer' }}>Mars</button>
                 </div>
             </div>
-            <div className="controls" style={{ backgroundColor: theme.ui.overlay, borderLeft: `1px solid ${theme.text.primary}` }}>
+            <div className={`controls ${isMenuOpen ? 'open' : ''}`} style={{ backgroundColor: theme.ui.overlay, borderLeft: `1px solid ${theme.text.primary}` }}>
+                <ThemeSwitcher />
                 <h1 style={{fontSize: "1.6rem"}}>Loomis-Michael Telescope Setting Circles</h1>
                 <div className="input-group">
                     <label>Navigation Object</label>
@@ -79,7 +83,7 @@ function App() {
                     onClick={() => handleCalculate()}
                     disabled={isLoading}
                     style={{
-                        backgroundColor: 'transparent',
+                        backgroundColor: theme.display,
                         border: `1px solid ${theme.text.primary}`,
                         color: theme.text.primary,
                         padding: '0.5em',

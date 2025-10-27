@@ -40,6 +40,7 @@ function App() {
     };
 
     const handlePresetClick = (objectName) => {
+        console.log("handlePresetClick", objectName);
         setTargetObject(objectName);
         handleCalculate(objectName);
     };

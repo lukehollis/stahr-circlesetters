@@ -1,8 +1,9 @@
 // circlesetter.js - STAHR Setting Circles Helper Script in JavaScript
 // Based on circlesetter.py by Casey Murray '25
 
-const HORIZONS_BASE_URL = import.meta.env.PROD ? 'https://ssd.jpl.nasa.gov/api/horizons.api' : '/api/horizons';
-const HEASARC_BASE_URL = import.meta.env.PROD ? 'https://heasarc.gsfc.nasa.gov/cgi-bin/Tools/convcoord/convcoord.pl' : '/api/heasarc';
+const PROXY_BASE_URL = import.meta.env.VITE_STAHR_API_URL || (import.meta.env.PROD ? 'https://stahr.struct.inc' : '');
+const HORIZONS_BASE_URL = `${PROXY_BASE_URL}/api/horizons`;
+const HEASARC_BASE_URL = `${PROXY_BASE_URL}/api/heasarc`;
 
 // Helper function to get current UTC time in the required format
 const getCurrentUTCTime = () => {

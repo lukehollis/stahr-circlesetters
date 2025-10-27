@@ -38,7 +38,7 @@ env/
 venv/
 build/
 develop-eggs/
-dist/
+# dist/
 downloads/
 eggs/
 lib64/
@@ -136,7 +136,7 @@ client/webpack/webpack-stats.json
 
 # Generated files
 .webpack/
-/dist/
+# /dist/
 /build/
 
 # Cache
@@ -174,7 +174,6 @@ models/*
 !models/.gitkeep
 app/ml/marl/models/*
 *cache*
-assets
 app/static/clut/*
 client/apps/map/public
 client/packages/clouds/docs

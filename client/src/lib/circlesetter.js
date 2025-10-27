@@ -1,6 +1,9 @@
 // circlesetter.js - STAHR Setting Circles Helper Script in JavaScript
 // Based on circlesetter.py by Casey Murray '25
 
+const HORIZONS_BASE_URL = import.meta.env.PROD ? 'https://ssd.jpl.nasa.gov/api/horizons.api' : '/api/horizons';
+const HEASARC_BASE_URL = import.meta.env.PROD ? 'https://heasarc.gsfc.nasa.gov/cgi-bin/Tools/convcoord/convcoord.pl' : '/api/heasarc';
+
 // Helper function to get current UTC time in the required format
 const getCurrentUTCTime = () => {
     const now = new Date();
@@ -9,9 +12,9 @@ const getCurrentUTCTime = () => {
 
 // Checks that a time is validly formatted by querying JPL Horizons.
 export const timecheck = async (testTime) => {
-    const horizons_url = `/api/horizons?format=text&COMMAND='301'&MAKE_EPHEM='YES'&EPHEM_TYPE='OBSERVER'&CENTER='500@399'&TLIST='${testTime}'&QUANTITIES='1'&REF_SYSTEM='B1950'`;
+    const url = `${HORIZONS_BASE_URL}?format=text&COMMAND='301'&MAKE_EPHEM='YES'&EPHEM_TYPE='OBSERVER'&CENTER='500@399'&TLIST='${testTime}'&QUANTITIES='1'&REF_SYSTEM='B1950'`;
     try {
-        const response = await fetch(horizons_url);
+        const response = await fetch(url);
         const text = await response.text();
         return text.includes('$$SOE');
     } catch (error) {
@@ -25,7 +28,7 @@ export const resolve = async (objectName, time = getCurrentUTCTime()) => {
     let ra, dec;
 
     // First attempt: HEASARC Coordinate Converter (SIMBAD)
-    const heasarc_url = `/api/heasarc?CoordVal=${objectName}&CoordType=B1950&Resolver=GRB%2FSIMBAD%2BSesame%2FNED&NoCache=on&Epoch=`;
+    const heasarc_url = `${HEASARC_BASE_URL}?CoordVal=${objectName}&CoordType=B1950&Resolver=GRB%2FSIMBAD%2BSesame%2FNED&NoCache=on&Epoch=`;
     console.log("Requesting HEASARC URL:", heasarc_url);
     try {
         const response = await fetch(heasarc_url);
@@ -51,10 +54,10 @@ export const resolve = async (objectName, time = getCurrentUTCTime()) => {
     }
 
     // Second attempt: JPL Horizons for planets, asteroids, etc.
-    let horizons_url = `/api/horizons?format=text&COMMAND=${encodeURIComponent(objectName)}&MAKE_EPHEM='YES'&EPHEM_TYPE='OBSERVER'&CENTER='500@399'&TLIST='${time}'&QUANTITIES='1'&REF_SYSTEM='B1950'`;
-    console.log("Requesting Horizons URL (initial):", horizons_url);
+    let url = `${HORIZONS_BASE_URL}?format=text&COMMAND=${encodeURIComponent(objectName)}&MAKE_EPHEM='YES'&EPHEM_TYPE='OBSERVER'&CENTER='500@399'&TLIST='${time}'&QUANTITIES='1'&REF_SYSTEM='B1950'`;
+    console.log("Requesting Horizons URL (initial):", url);
     try {
-        let response = await fetch(horizons_url);
+        let response = await fetch(url);
         let text = await response.text();
         console.log("Horizons Initial Response:", text);
         let lines = text.split('\n');
@@ -95,9 +98,9 @@ export const resolve = async (objectName, time = getCurrentUTCTime()) => {
             console.log(`DEBUG: Final best match ID: ${objId}`);
             if (objId) {
                 console.log(`Final selected ID: ${objId}`);
-                horizons_url = `/api/horizons?format=text&COMMAND=${objId}&MAKE_EPHEM='YES'&EPHEM_TYPE='OBSERVER'&CENTER='500@399'&TLIST='${time}'&QUANTITIES='1'&REF_SYSTEM='B1950'`;
-                console.log("Requesting Horizons URL (specific ID):", horizons_url);
-                response = await fetch(horizons_url);
+                url = `${HORIZONS_BASE_URL}?format=text&COMMAND=${objId}&MAKE_EPHEM='YES'&EPHEM_TYPE='OBSERVER'&CENTER='500@399'&TLIST='${time}'&QUANTITIES='1'&REF_SYSTEM='B1950'`;
+                console.log("Requesting Horizons URL (specific ID):", url);
+                response = await fetch(url);
                 text = await response.text();
                 console.log("Horizons Specific ID Response:", text);
                 lines = text.split('\n');
